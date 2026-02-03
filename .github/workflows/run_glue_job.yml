@@ -1,7 +1,7 @@
 name: Run AWS Glue Cleaning Job
 
 on:
-  workflow_dispatch:   # Manual run button se trigger hoga
+  workflow_dispatch:
 
 jobs:
   glue-job:
@@ -15,7 +15,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
 
-    - name: Start Glue Job and wait
+    - name: Start Glue Job and poll status
       run: |
         echo "Starting Glue Job..."
 
@@ -25,8 +25,24 @@ jobs:
 
         echo "Glue Job Run ID: $JOB_RUN_ID"
 
-        aws glue wait job-run-complete \
-          --job-name liquor-sales-cleaning-job-copy \
-          --run-id $JOB_RUN_ID
+        STATUS="RUNNING"
 
-        echo "Glue Job completed successfully"
+        while [[ "$STATUS" == "RUNNING" || "$STATUS" == "STARTING" ]]; do
+          echo "Checking job status..."
+          sleep 30
+
+          STATUS=$(aws glue get-job-run \
+            --job-name liquor-sales-cleaning-job-copy \
+            --run-id $JOB_RUN_ID \
+            --query 'JobRun.JobRunState' \
+            --output text)
+
+          echo "Current status: $STATUS"
+        done
+
+        if [[ "$STATUS" != "SUCCEEDED" ]]; then
+          echo "Glue Job failed with status: $STATUS"
+          exit 1
+        fi
+
+        echo "Glue Job completed successfully 🎉"
