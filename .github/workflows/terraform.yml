@@ -1,9 +1,14 @@
 name: Terraform Infrastructure
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      raw_bucket:
+        description: "Raw S3 bucket name"
+        required: true
+      clean_bucket:
+        description: "Cleaned S3 bucket name"
+        required: true
 
 jobs:
   terraform:
@@ -27,6 +32,9 @@ jobs:
         run: terraform init
         working-directory: terraform
 
-      - name: Terraform Apply (Auto)
-        run: terraform apply -auto-approve
+      - name: Terraform Apply (User Inputs)
+        run: |
+          terraform apply -auto-approve \
+          -var="raw_bucket_name=${{ github.event.inputs.raw_bucket }}" \
+          -var="clean_bucket_name=${{ github.event.inputs.clean_bucket }}"
         working-directory: terraform
