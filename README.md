@@ -61,3 +61,9 @@ Conclusion:
 This project successfully analyzes the Iowa Liquor Sales dataset to derive meaningful insights from state-level wholesale liquor sales data. By applying exploratory data analysis techniques, the project identifies regional demand patterns, seasonal sales trends, and product and vendor performance at an aggregate level.
 The use of interactive dashboards enables clear and intuitive visualization of key metrics such as sales value, volume sold, and regional distribution, making the data easily interpretable for decision-makers. Although individual customer-level information is not included, the analysis provides valuable support for planning, distribution management, and data-driven policy decisions.
 Overall, the project demonstrates how structured government data can be effectively transformed into actionable insights using data analytics and visualization techniques.
+
+Architecture Diagram :
+
+
+![Architecture Diagram](Architecture diagram.jpg.png)
+
