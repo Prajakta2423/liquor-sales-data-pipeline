@@ -62,8 +62,8 @@ This project successfully analyzes the Iowa Liquor Sales dataset to derive meani
 The use of interactive dashboards enables clear and intuitive visualization of key metrics such as sales value, volume sold, and regional distribution, making the data easily interpretable for decision-makers. Although individual customer-level information is not included, the analysis provides valuable support for planning, distribution management, and data-driven policy decisions.
 Overall, the project demonstrates how structured government data can be effectively transformed into actionable insights using data analytics and visualization techniques.
 
-Architecture Diagram :
+## Architecture Diagram
 
+![Architecture Diagram](architecture.png)
 
-![Architecture Diagram](Architecture diagram.jpg.png)
 
