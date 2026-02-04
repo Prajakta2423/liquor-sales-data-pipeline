@@ -1,1 +1,89 @@
+name: Deploy Terraform
+
+on:
+  workflow_dispatch:
+    inputs:
+      aws_region:
+        description: "AWS Region"
+        required: true
+
+      iam_role:
+        description: "IAM Role ARN"
+        required: true
+
+      raw_data_s3_path:
+        description: "Raw S3 Path"
+        required: true
+
+      transformed_data_s3_path:
+        description: "Clean S3 Path"
+        required: true
+
+      glue_script_s3_path:
+        description: "Glue Script Path"
+        required: true
+
+      glue_job_name:
+        description: "Glue Job Name"
+        required: true
+
+      crawler_name:
+        description: "Crawler Name"
+        required: true
+
+      raw_glue_database:
+        description: "Raw DB Name"
+        required: true
+
+      transformed_glue_database:
+        description: "Clean DB Name"
+        required: true
+
+      worker_type:
+        description: "Worker Type (G.1X/G.2X)"
+        required: true
+
+      number_of_workers:
+        description: "Workers"
+        required: true
+
+      timeout:
+        description: "Timeout (minutes)"
+        required: true
+
+      max_retries:
+        description: "Retries"
+        required: true
+
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        working-directory: terraform
+        run: terraform init
+
+      - name: Terraform Apply
+        working-directory: terraform
+        run: |
+          terraform apply -auto-approve \
+            -var="aws_region=${{ github.event.inputs.aws_region }}" \
+            -var="iam_role=${{ github.event.inputs.iam_role }}" \
+            -var="raw_data_s3_path=${{ github.event.inputs.raw_data_s3_path }}" \
+            -var="transformed_data_s3_path=${{ github.event.inputs.transformed_data_s3_path }}" \
+            -var="glue_script_s3_path=${{ github.event.inputs.glue_script_s3_path }}" \
+            -var="glue_job_name=${{ github.event.inputs.glue_job_name }}" \
+            -var="crawler_name=${{ github.event.inputs.crawler_name }}" \
+            -var="raw_glue_database=${{ github.event.inputs.raw_glue_database }}" \
+            -var="transformed_glue_database=${{ github.event.inputs.transformed_glue_database }}" \
+            -var="worker_type=${{ github.event.inputs.worker_type }}" \
+            -var="number_of_workers=${{ github.event.inputs.number_of_workers }}" \
+            -var="timeout=${{ github.event.inputs.timeout }}" \
+            -var="max_retries=${{ github.event.inputs.max_retries }}"
 
